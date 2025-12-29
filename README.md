@@ -122,8 +122,8 @@ Select a tool for working with your database:
 
    ```javascript
    // server/db.js
-   const Database = require('better-sqlite3')
-   const db = new Database('app.db')
+   const Database = require('better-sqlite3');
+   const db = new Database('app.db');
 
    // Create tables
    db.exec(`
@@ -132,9 +132,9 @@ Select a tool for working with your database:
        text TEXT NOT NULL,
        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
      )
-   `)
+   `);
 
-   module.exports = db
+   module.exports = db;
    ```
 
 ### Step 6: Implement CRUD Operations
@@ -146,9 +146,9 @@ Select a tool for working with your database:
    ```javascript
    // server/db.js
    function createMessage(text) {
-     const stmt = db.prepare('INSERT INTO messages (text) VALUES (?)')
-     const result = stmt.run(text)
-     return result.lastInsertRowid
+     const stmt = db.prepare('INSERT INTO messages (text) VALUES (?)');
+     const result = stmt.run(text);
+     return result.lastInsertRowid;
    }
    ```
 
@@ -158,11 +158,11 @@ Select a tool for working with your database:
 
    ```javascript
    function getAllMessages() {
-     return db.prepare('SELECT * FROM messages ORDER BY created_at DESC').all()
+     return db.prepare('SELECT * FROM messages ORDER BY created_at DESC').all();
    }
 
    function getMessageById(id) {
-     return db.prepare('SELECT * FROM messages WHERE id = ?').get(id)
+     return db.prepare('SELECT * FROM messages WHERE id = ?').get(id);
    }
    ```
 
@@ -172,8 +172,8 @@ Select a tool for working with your database:
 
    ```javascript
    function updateMessage(id, text) {
-     const stmt = db.prepare('UPDATE messages SET text = ? WHERE id = ?')
-     return stmt.run(text, id).changes > 0
+     const stmt = db.prepare('UPDATE messages SET text = ? WHERE id = ?');
+     return stmt.run(text, id).changes > 0;
    }
    ```
 
@@ -183,8 +183,8 @@ Select a tool for working with your database:
 
    ```javascript
    function deleteMessage(id) {
-     const stmt = db.prepare('DELETE FROM messages WHERE id = ?')
-     return stmt.run(id).changes > 0
+     const stmt = db.prepare('DELETE FROM messages WHERE id = ?');
+     return stmt.run(id).changes > 0;
    }
    ```
 
@@ -196,32 +196,32 @@ Select a tool for working with your database:
 
    ```javascript
    // server/index.js
-   const db = require('./db')
+   const db = require('./db');
 
    // GET /api/messages - Get all messages
    app.get('/api/messages', (req, res) => {
-     const messages = db.getAllMessages()
-     res.json(messages)
-   })
+     const messages = db.getAllMessages();
+     res.json(messages);
+   });
 
    // POST /api/messages - Create new message
    app.post('/api/messages', (req, res) => {
-     const { text } = req.body
+     const { text } = req.body;
      if (!text) {
-       return res.status(400).json({ error: 'Text is required' })
+       return res.status(400).json({ error: 'Text is required' });
      }
-     const id = db.createMessage(text)
-     res.json({ id, text, success: true })
-   })
+     const id = db.createMessage(text);
+     res.json({ id, text, success: true });
+   });
 
    // GET /api/messages/:id - Get message by ID
    app.get('/api/messages/:id', (req, res) => {
-     const message = db.getMessageById(req.params.id)
+     const message = db.getMessageById(req.params.id);
      if (!message) {
-       return res.status(404).json({ error: 'Message not found' })
+       return res.status(404).json({ error: 'Message not found' });
      }
-     res.json(message)
-   })
+     res.json(message);
+   });
    ```
 
 ### Step 8: Update Client to Use Database
@@ -231,8 +231,8 @@ Select a tool for working with your database:
    ```javascript
    // client/index.html
    async function loadMessages() {
-     const response = await fetch('/api/messages')
-     const messages = await response.json()
+     const response = await fetch('/api/messages');
+     const messages = await response.json();
      // Display messages
    }
 
@@ -241,10 +241,10 @@ Select a tool for working with your database:
        method: 'POST',
        headers: { 'Content-Type': 'application/json' },
        body: JSON.stringify({ text }),
-     })
-     const result = await response.json()
+     });
+     const result = await response.json();
      // Refresh messages
-     loadMessages()
+     loadMessages();
    }
    ```
 
@@ -258,14 +258,14 @@ Select a tool for working with your database:
    function createMessage(text) {
      // Validate
      if (!text || text.trim().length === 0) {
-       throw new Error('Text cannot be empty')
+       throw new Error('Text cannot be empty');
      }
      if (text.length > 500) {
-       throw new Error('Text too long (max 500 characters)')
+       throw new Error('Text too long (max 500 characters)');
      }
 
-     const stmt = db.prepare('INSERT INTO messages (text) VALUES (?)')
-     return stmt.run(text.trim()).lastInsertRowid
+     const stmt = db.prepare('INSERT INTO messages (text) VALUES (?)');
+     return stmt.run(text.trim()).lastInsertRowid;
    }
    ```
 
@@ -487,8 +487,8 @@ CREATE TABLE users (
 | Version | Date       | Author                 | Changes         |
 | ------- | ---------- | ---------------------- | --------------- |
 | 1.0     | 2025-12-25 | RepodIn Education Team | Initial version |
+| 1.1     | 2025-12-29 | RepodIn Education Team | Minor text edits |
 
 ---
 
 **Next Review Date:** 2026-03-20
-
